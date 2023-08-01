@@ -13,7 +13,17 @@ import Modal from "../../containers/Modal";
 import { useData } from "../../contexts/DataContext";
 
 const Page = () => {
-  const {last} = useData()
+  const { data } = useData();
+  const getLastEvent = () => {
+    let lastEvent = data?.events[0];
+    data?.events.forEach((event) => {
+      if (event.date > lastEvent.date ) {
+        lastEvent = event
+      }
+    })
+    return lastEvent;
+  }
+
   return <>
     <header>
       <Menu />
@@ -23,7 +33,7 @@ const Page = () => {
         <Slider />
       </section>
       <section className="ServicesContainer">
-        <h2 className="Title">Nos services</h2>
+        <h2 className="Title" id="nos-services">Nos services</h2>
         <p>Nous organisons des événements sur mesure partout dans le monde</p>
         <div className="ListContainer">
           <ServiceCard imageSrc="/images/priscilla-du-preez-Q7wGvnbuwj0-unsplash1.png">
@@ -52,11 +62,11 @@ const Page = () => {
         </div>
       </section>
       <section className="EventsContainer">
-        <h2 className="Title">Nos réalisations</h2>
+        <h2 className="Title" id="nos-realisations">Nos réalisations</h2>
         <EventList />
       </section>
       <section className="PeoplesContainer">
-        <h2 className="Title">Notre équipe</h2>
+        <h2 className="Title" id="notre-equipe">Notre équipe</h2>
         <p>Une équipe d’experts dédiés à l’ogranisation de vos événements</p>
         <div className="ListContainer">
           <PeopleCard
@@ -96,7 +106,7 @@ const Page = () => {
         <Modal
           Content={
             <div className="ModalMessage--success">
-              <h3>Message envoyé !</h3>
+              <div>Message envoyé !</div>
               <p>
                 Merci pour votre message nous tâcherons de vous répondre dans
                 les plus brefs délais
@@ -117,9 +127,9 @@ const Page = () => {
       <div className="col presta">
         <h3>Notre derniére prestation</h3>
         <EventCard
-          imageSrc={last?.cover}
-          title={last?.title}
-          date={new Date(last?.date)}
+          imageSrc={getLastEvent()?.cover}
+          title={getLastEvent()?.title}
+          date={new Date(getLastEvent()?.date)}
           small
           label="boom"
         />
